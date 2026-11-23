@@ -1,0 +1,6 @@
+<Project>
+	<PropertyGroup>
+		<!-- Avoid NU1900 warnings when building offline or against feeds without audit endpoints. -->
+		<NuGetAudit>false</NuGetAudit>
+	</PropertyGroup>
+</Project>

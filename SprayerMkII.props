@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<ModID>stationeers-sprayer-mkii</ModID>
+		<AssemblyName>SprayerMkII</AssemblyName>
+		<Description>Adds a craftable Tier 2 Spray Gun MkII for striped network painting, whole-network Spray Gun painting, and configurable paint can capacity and efficiency.</Description>
+
+		<!-- Optional: Set this if Stationeers is not found automatically (Steam root, Stationeers folder, or Managed folder). -->
+		<StationeersDirectory></StationeersDirectory>
+	</PropertyGroup>
+</Project>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<DllSubDir>steamapps/common/Stationeers/rocketstation_Data/Managed</DllSubDir>
+		<GameManagedSubDir>rocketstation_Data/Managed</GameManagedSubDir>
+	</PropertyGroup>
+
+	<!-- Manual override via SprayerMkII.props or -p:StationeersDirectory=... -->
+	<PropertyGroup Condition="'$(StationeersDirectory)' != ''">
+		<StationeersDllDir Condition="Exists('$(StationeersDirectory)/Assembly-CSharp.dll')">$(StationeersDirectory)</StationeersDllDir>
+		<StationeersDllDir Condition="'$(StationeersDllDir)' == '' And Exists('$(StationeersDirectory)/$(GameManagedSubDir)/Assembly-CSharp.dll')">$(StationeersDirectory)/$(GameManagedSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="'$(StationeersDllDir)' == '' And Exists('$(StationeersDirectory)/$(DllSubDir)/Assembly-CSharp.dll')">$(StationeersDirectory)/$(DllSubDir)</StationeersDllDir>
+	</PropertyGroup>
+
+	<!-- Environment variable STATIONEERS_DIR (Steam root, Stationeers folder, or Managed folder) -->
+	<PropertyGroup Condition="'$(StationeersDirectory)' == '' And '$(STATIONEERS_DIR)' != ''">
+		<StationeersDllDir Condition="Exists('$(STATIONEERS_DIR)/Assembly-CSharp.dll')">$(STATIONEERS_DIR)</StationeersDllDir>
+		<StationeersDllDir Condition="'$(StationeersDllDir)' == '' And Exists('$(STATIONEERS_DIR)/$(GameManagedSubDir)/Assembly-CSharp.dll')">$(STATIONEERS_DIR)/$(GameManagedSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="'$(StationeersDllDir)' == '' And Exists('$(STATIONEERS_DIR)/$(DllSubDir)/Assembly-CSharp.dll')">$(STATIONEERS_DIR)/$(DllSubDir)</StationeersDllDir>
+	</PropertyGroup>
+
+	<!-- Auto-detect standard Steam installation paths when no explicit override is set -->
+	<PropertyGroup Condition="'$(StationeersDirectory)' == '' And '$(STATIONEERS_DIR)' == ''">
+		<!-- Windows -->
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And Exists('C:/Program Files (x86)/Steam/$(DllSubDir)')">C:/Program Files (x86)/Steam/$(DllSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And Exists('C:/Program Files/Steam/$(DllSubDir)')">C:/Program Files/Steam/$(DllSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And Exists('D:/Program Files (x86)/Steam/$(DllSubDir)')">D:/Program Files (x86)/Steam/$(DllSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And Exists('D:/Program Files/Steam/$(DllSubDir)')">D:/Program Files/Steam/$(DllSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And Exists('C:/Steam/$(DllSubDir)')">C:/Steam/$(DllSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And Exists('D:/Steam/$(DllSubDir)')">D:/Steam/$(DllSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And Exists('E:/Steam/$(DllSubDir)')">E:/Steam/$(DllSubDir)</StationeersDllDir>
+
+		<!-- Linux -->
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And Exists('$(HOME)/.local/share/Steam/$(DllSubDir)')">$(HOME)/.local/share/Steam/$(DllSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And Exists('$(HOME)/.steam/steam/$(DllSubDir)')">$(HOME)/.steam/steam/$(DllSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And Exists('$(HOME)/.var/app/com.valvesoftware.Steam/.local/share/Steam/$(DllSubDir)')">$(HOME)/.var/app/com.valvesoftware.Steam/.local/share/Steam/$(DllSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And Exists('$(HOME)/Steam/$(DllSubDir)')">$(HOME)/Steam/$(DllSubDir)</StationeersDllDir>
+		<StationeersDllDir Condition="!Exists('$(StationeersDllDir)') And '$(STEAMROOT)' != '' And Exists('$(STEAMROOT)/$(DllSubDir)')">$(STEAMROOT)/$(DllSubDir)</StationeersDllDir>
+	</PropertyGroup>
+</Project>

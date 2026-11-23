@@ -1,0 +1,30 @@
+# Build outputs
+bin/
+obj/
+
+# Auto-generated version file
+VersionInfo.g.cs
+
+# Game-derived assets (not redistributed in source control)
+Assets/*
+!Assets/README.md
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# IDE & editor files
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.sln.docstates
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

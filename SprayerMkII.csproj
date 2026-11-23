@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="SprayerMkII.props" />
+	<Import Project="Template/Template.props" />
+	<Import Project="Template/FindStationeers.props" />
+	<PropertyGroup>
+		<!-- Krafs.Publicizer and MonoMod.Utils both define IgnoresAccessChecksToAttribute. -->
+		<NoWarn>$(NoWarn);CS0436</NoWarn>
+	</PropertyGroup>
+	<ItemGroup Condition="Exists('Assets/sprayermkii.assets')">
+		<EmbeddedResource Include="Assets/sprayermkii.assets" LogicalName="SprayerMkII.Assets.sprayermkii.assets" />
+	</ItemGroup>
+</Project>

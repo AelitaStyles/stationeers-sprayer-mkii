@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ModMetadata
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+	<ModID />
+	<Name>Sprayer MkII</Name>
+	<Author>Snowy</Author>
+	<Version>1.0.0</Version>
+	<Description>[h1]Sprayer MkII[/h1]
+
+		Makes painting pipes, cables, and chutes in Stationeers much faster and adds a two-can Spray Gun MkII.
+
+		[h2]Features[/h2]
+		[list]
+		[*][b]Whole-network painting:[/b] Using a Spray Gun paints the entire connected pipe, cable, or chute network at once (including inline tanks, while leaving standalone tanks and devices untouched). Hold Shift to paint a single segment instead.
+		[*][b]Spray Gun MkII:[/b] Craftable in the Tier 2 Tool Manufactory. Holds two paint cans side by side to paint networks in a repeating stripe pattern (default: two primary, one secondary). The body can also be painted.
+		[*][b]Bigger cans and fixed efficiency:[/b] Paint cans hold 5x more paint by default (100 sprays by hand). Fixes the vanilla Spray Gun efficiency bug and makes efficiency configurable (default 6x, giving 600 sprays per can).
+		[*][b]Mod support:[/b] Works with modded networks built on LibConstruct, such as ReVolt cable trays.
+		[*][b]Save safe:[/b] Safe to add to or remove from existing saves.
+		[/list]
+
+		[h2]Configuration[/h2]
+		All settings (can capacity, Spray Gun efficiency, single-segment modifier key, and stripe pattern) can be changed in-game through StationeersLaunchPad's mod config menu.
+
+		[h2]Requirements[/h2]
+		[b]Notice:[/b] This is a BepInEx plugin mod and requires [url=https://github.com/StationeersLaunchPad/StationeersLaunchPad]StationeersLaunchPad[/url] (and BepInEx) to load. Subscribing on the Steam Workshop alone will not load this mod without StationeersLaunchPad installed.
+	</Description>
+	<ChangeLog>
+		[h3]Version 1.0.0:[/h3]
+		[list]
+		[*]Initial release
+		[/list]
+	</ChangeLog>
+	<Tags>
+		<Tag>Mod</Tag>
+	</Tags>
+	<Dependencies />
+	<LoadBefore />
+	<LoadAfter />
+</ModMetadata>
