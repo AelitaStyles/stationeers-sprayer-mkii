@@ -6,7 +6,7 @@
 	<ModID />
 	<Name>Sprayer MkII</Name>
 	<Author>Snowy</Author>
-	<Version>1.0.0</Version>
+	<Version>1.0.1</Version>
 	<Description>[h1]Sprayer MkII[/h1]
 
 		Makes painting pipes, cables, and chutes in Stationeers much faster and adds a two-can Spray Gun MkII.
@@ -27,11 +27,17 @@
 		[b]Notice:[/b] This is a BepInEx plugin mod and requires [url=https://github.com/StationeersLaunchPad/StationeersLaunchPad]StationeersLaunchPad[/url] (and BepInEx) to load. Subscribing on the Steam Workshop alone will not load this mod without StationeersLaunchPad installed.
 	</Description>
 	<ChangeLog>
+		[h3]Version 1.0.1:[/h3]
+		[list]
+		[*]Fixed Spray Gun MkII not appearing in the Tier 2 Tool Manufactory recipe list
+		[*]Updated Spray Gun MkII recipe to 10 Steel, 10 Silicon, 5 Electrum
+		[/list]
 		[h3]Version 1.0.0:[/h3]
 		[list]
 		[*]Initial release
 		[/list]
 	</ChangeLog>
+	<WorkshopHandle>3845464932</WorkshopHandle>
 	<Tags>
 		<Tag>Mod</Tag>
 	</Tags>

@@ -5,7 +5,7 @@ A Stationeers mod that makes painting pipes, cables, and chutes faster and adds 
 ## Features
 
 - **Whole-network painting:** Spraying any pipe (including inline tanks), cable, or chute with a Spray Gun paints the entire connected network at once. Standalone tanks and attached devices are left alone. Hold **Shift** (configurable) to paint a single segment instead.
-- **Spray Gun MkII:** Craftable in the Tier 2 Tool Manufactory (10 Steel, 5 Electrum, 5 Plastic). Holds a primary and secondary paint can side by side to paint networks in a repeating stripe pattern. Its body can also be painted.
+- **Spray Gun MkII:** Craftable in the Tier 2 Tool Manufactory (10 Steel, 10 Silicon, 5 Electrum). Holds a primary and secondary paint can side by side to paint networks in a repeating stripe pattern. Its body can also be painted.
 - **Bigger paint cans:** Scales spray paint can capacity (default `5x`, giving 100 sprays by hand).
 - **Fixed Spray Gun efficiency:** Fixes the vanilla Spray Gun applying efficiency twice and makes efficiency configurable (default `6x`, giving 600 sprays per `5x` can).
 - **Modded network support:** Works with modded networks built on LibConstruct, such as ReVolt cable trays.

@@ -8,6 +8,7 @@ using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Items;
 using Assets.Scripts.UI;
 using HarmonyLib;
+using Reagents;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Object = UnityEngine.Object;
@@ -64,6 +65,7 @@ internal static class MkIIPrefabFactory {
 
 			mk2.PrefabName = PrefabName;
 			mk2.PrefabHash = PrefabHash;
+			mk2._originalPrefab = mk2;
 			mk2.RecipeTier = MachineTier.TierTwo;
 
 			MkIIModelBuilder.ApplyModelAndSlots(mk2, vanillaGun);
@@ -87,13 +89,37 @@ internal static class MkIIPrefabFactory {
 
 		Prefab.RegisterExisting(mk2);
 
-		if (DynamicThing.DynamicThingPrefabs is { } dynamicPrefabs && !dynamicPrefabs.Contains(mk2)) {
-			dynamicPrefabs.Add(mk2);
+		if (DynamicThing.DynamicThingPrefabs is { } dynamicPrefabs) {
+			if (!dynamicPrefabs.Contains(mk2)) {
+				dynamicPrefabs.Add(mk2);
+			}
+			dynamicPrefabs.Sort((x, y) => x.CompareTo(y));
 		}
+
+		EnsureInputPrefabsEntry(mk2);
 
 		MkIIPrefab = mk2;
 		SprayerMkIIPlugin.Log.LogInfo($"Registered custom prefab '{PrefabName}' (hash {PrefabHash}).");
 		return mk2;
+	}
+
+	internal static void EnsureInputPrefabsEntry(SprayGun mk2) {
+		if (mk2 == null || InputPrefabs.Instance == null || InputPrefabs.PrefabReferences == null || InputPrefabs.PrefabReferences.Count == 0) {
+			return;
+		}
+
+		if (InputPrefabs.PrefabReferences.ContainsKey(mk2.PrefabHash)) {
+			return;
+		}
+
+		if (!InputPrefabs.Instance._transformLookup.TryGetValue(mk2.SortingClass, out var parent) || parent == null) {
+			return;
+		}
+
+		var prefabRef = Object.Instantiate(InputPrefabs.Instance.PrefabReference, parent);
+		prefabRef.SetPrefab(mk2, InputPrefabs.Fabricator?.GetRecipeSafe(mk2) ?? Recipe.INVALID);
+		prefabRef.SetVisible(false);
+		InputPrefabs.PrefabReferences.Add(prefabRef.PrefabHash, prefabRef);
 	}
 
 	internal static void RefreshThumbnail() {
@@ -103,10 +129,24 @@ internal static class MkIIPrefabFactory {
 
 		var vanillaGun = Prefab.Find<SprayGun>(VanillaPrefabName);
 		if (MkIIPrefab.Thumbnail != null && MkIIPrefab.Thumbnail != vanillaGun?.Thumbnail) {
+			SyncInputPrefabsThumbnail(MkIIPrefab);
 			return;
 		}
 
 		AssignThumbnail(MkIIPrefab, vanillaGun);
+		SyncInputPrefabsThumbnail(MkIIPrefab);
+	}
+
+	private static void SyncInputPrefabsThumbnail(SprayGun mk2) {
+		if (mk2?.Thumbnail == null || InputPrefabs.PrefabReferences == null) {
+			return;
+		}
+
+		if (InputPrefabs.PrefabReferences.TryGetValue(mk2.PrefabHash, out var prefabRef)
+			&& prefabRef != null
+			&& prefabRef.Thumbnail != null) {
+			prefabRef.Thumbnail.sprite = mk2.Thumbnail;
+		}
 	}
 
 	private static void AssignThumbnail(SprayGun mk2, SprayGun vanillaGun) {
@@ -309,6 +349,19 @@ internal static class MkIIPrefabFactory {
 		var rx = Mathf.Clamp(Mathf.RoundToInt(cx - side * 0.5f), 0, w - side);
 		var ry = Mathf.Clamp(Mathf.RoundToInt(cy - side * 0.5f), 0, h - side);
 		return new Rect(rx, ry, side, side);
+	}
+}
+
+[HarmonyPatch(typeof(InputPrefabs), nameof(InputPrefabs.PopulateList))]
+internal static class InputPrefabsPopulateListPatch {
+	[HarmonyPrefix]
+	private static void Prefix() {
+		try {
+			MkIIRegistration.RegisterLocalization();
+			MkIIPrefabFactory.EnsureRegistered();
+		} catch (Exception ex) {
+			SprayerMkIIPlugin.Log.LogError($"Failed to register {MkIIPrefabFactory.PrefabName} before InputPrefabs.PopulateList: {ex}");
+		}
 	}
 }
 

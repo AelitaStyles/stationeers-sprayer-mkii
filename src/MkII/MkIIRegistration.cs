@@ -71,14 +71,18 @@ internal static class MkIIRegistration {
 			RecipeTier = MachineTier.TierTwo,
 			Recipe = new Recipe {
 				Steel = 10f,
+				Silicon = 10f,
 				Electrum = 5f,
-				Plastic = 5f,
 				Time = 10f,
-				Energy = 500f
+				Energy = 2000f
 			}
 		};
 
-		recipes.AddRecipe(recipeData, null);
+		if (!recipes.AddRecipe(recipeData, null)) {
+			SprayerMkIIPlugin.Log.LogWarning($"Failed to add Tier 2 Tool Manufactory recipe for {MkIIPrefabFactory.PrefabName}.");
+			return;
+		}
+
 		recipes.GenerateRecipieList();
 		SprayerMkIIPlugin.Log.LogInfo($"Registered Tier 2 Tool Manufactory recipe for {MkIIPrefabFactory.PrefabName}.");
 	}
