@@ -6,7 +6,7 @@
 	<ModID />
 	<Name>Sprayer MkII</Name>
 	<Author>Snowy</Author>
-	<Version>1.0.1</Version>
+	<Version>1.0.2</Version>
 	<Description>[h1]Sprayer MkII[/h1]
 
 		Makes painting pipes, cables, and chutes in Stationeers much faster and adds a two-can Spray Gun MkII.
@@ -27,6 +27,13 @@
 		[b]Notice:[/b] This is a BepInEx plugin mod and requires [url=https://github.com/StationeersLaunchPad/StationeersLaunchPad]StationeersLaunchPad[/url] (and BepInEx) to load. Subscribing on the Steam Workshop alone will not load this mod without StationeersLaunchPad installed.
 	</Description>
 	<ChangeLog>
+		[h3]Version 1.0.2:[/h3]
+		[list]
+		[*]Fixed Shift single-segment painting and per-player stripe patterns in multiplayer
+		[*]Synced server paint can capacity and Spray Gun efficiency to joining clients
+		[*]Added headless/dedicated server guards for MkII thumbnail and paint material generation
+		[*]Fixed remote players' spray completions interrupting a listen-server host's spray audio loop
+		[/list]
 		[h3]Version 1.0.1:[/h3]
 		[list]
 		[*]Fixed Spray Gun MkII not appearing in the Tier 2 Tool Manufactory recipe list

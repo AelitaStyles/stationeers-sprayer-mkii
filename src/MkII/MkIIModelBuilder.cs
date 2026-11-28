@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Assets.Scripts;
 using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Items;
 using HarmonyLib;
@@ -442,7 +443,7 @@ internal static class MkIIModelBuilder {
 	}
 
 	internal static Material GetPaintedMaterial(ColorSwatch swatch) {
-		if (BaseMaterial == null) {
+		if (GameManager.IsBatchMode || BaseMaterial == null) {
 			return swatch?.Normal;
 		}
 
@@ -493,7 +494,7 @@ internal static class MkIIModelBuilder {
 	}
 
 	internal static void ApplyPaintedMaterial(Thing thing) {
-		if (thing == null || BaseMaterial == null) {
+		if (GameManager.IsBatchMode || thing == null || BaseMaterial == null) {
 			return;
 		}
 

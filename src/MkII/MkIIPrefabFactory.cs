@@ -123,7 +123,7 @@ internal static class MkIIPrefabFactory {
 	}
 
 	internal static void RefreshThumbnail() {
-		if (MkIIPrefab == null) {
+		if (GameManager.IsBatchMode || MkIIPrefab == null) {
 			return;
 		}
 
@@ -150,6 +150,10 @@ internal static class MkIIPrefabFactory {
 	}
 
 	private static void AssignThumbnail(SprayGun mk2, SprayGun vanillaGun) {
+		if (GameManager.IsBatchMode) {
+			return;
+		}
+
 		try {
 			var sprite = RenderThumbnailSprite(mk2);
 			if (sprite != null) {
@@ -390,5 +394,6 @@ internal static class PrefabClearPatch {
 		MkIIPrefabFactory.Reset();
 		MkIIModelBuilder.Reset();
 		PrefabPatches.Reset();
+		MultiplayerSync.ClearServerOverrides();
 	}
 }

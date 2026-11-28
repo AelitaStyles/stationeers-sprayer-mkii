@@ -25,9 +25,9 @@ internal static class SprayPatches {
 	private const float MkIIDurationMultiplier = 0.25f;
 	private const float HissLoopStartRatio = 0.25f;
 	private const float HissLoopEndRatio = 0.78f;
-	private const int MaxStripePatternLength = 16;
+	internal const int MaxStripePatternLength = 16;
 
-	private static readonly bool[] DefaultStripePattern = { false, false, true };
+	internal static readonly bool[] DefaultStripePattern = { false, false, true };
 	private static string _cachedPatternRaw;
 	private static bool[] _cachedPattern = DefaultStripePattern;
 
@@ -73,18 +73,32 @@ internal static class SprayPatches {
 
 		// Harmony003 false-positives when reading a property on a non-ref struct parameter.
 #pragma warning disable Harmony003
-		if (attack.SourceItem is not SprayGun sprayGun || SprayInputHelper.IsSinglePaintModifierHeld()) {
+		if (attack.SourceItem is not SprayGun sprayGun) {
+			return true;
+		}
+		var isLocalPlayer = !GameManager.IsBatchMode && attack.ActiveHand?.Parent == InventoryManager.Parent;
 #pragma warning restore Harmony003
-			_activeSprayGun = null;
+
+		var remoteOptions = MultiplayerSync.CurrentRemoteSprayOptions;
+		var singleSegment = remoteOptions != null
+			? remoteOptions.SingleSegment
+			: isLocalPlayer && SprayInputHelper.IsSinglePaintModifierHeld();
+		if (singleSegment) {
+			if (isLocalPlayer) {
+				_activeSprayGun = null;
+			}
 			return true;
 		}
 
 		if (!NetworkPaintHelper.TryGetNetworkSegments(__instance, out var networkSegments)) {
-			_activeSprayGun = null;
+			if (isLocalPlayer) {
+				_activeSprayGun = null;
+			}
 			return true;
 		}
 
-		__result = DoNetworkSpray(sprayGun, __instance, networkSegments, doAction);
+		var pattern = remoteOptions?.StripePattern ?? GetStripePattern();
+		__result = DoNetworkSpray(sprayGun, __instance, networkSegments, pattern, doAction, isLocalPlayer);
 		return false;
 	}
 
@@ -92,7 +106,9 @@ internal static class SprayPatches {
 		SprayGun gun,
 		Thing targetThing,
 		List<NetworkPaintHelper.SegmentEntry> networkSegments,
-		bool doAction
+		bool[] pattern,
+		bool doAction,
+		bool isLocalPlayer
 	) {
 		var action = new Thing.DelayedActionInstance {
 			Duration = gun.TimeToUse(),
@@ -125,7 +141,6 @@ internal static class SprayPatches {
 
 		var hasSecondary = isDualCan && secondaryCan.PaintMaterial != null;
 		var secondarySwatch = hasSecondary ? GameManager.GetColorSwatch(secondaryCan.PaintMaterial) : null;
-		var pattern = GetStripePattern();
 
 		var toPaint = new List<(Thing Segment, bool UseSecondary)>(networkSegments.Count);
 		foreach (var entry in networkSegments) {
@@ -141,7 +156,7 @@ internal static class SprayPatches {
 			return action.Fail(GameStrings.CantPaintSameColour, targetThing.ToTooltip(), primarySwatch.ToTooltip());
 		}
 
-		var efficiency = SprayerMkIIPlugin.GetSanitizedSprayGunEfficiency(gun.Efficiency);
+		var efficiency = MultiplayerSync.GetEffectiveSprayGunEfficiency(gun.Efficiency);
 		var costScale = 1f / efficiency;
 		var paintableCount = CountPaintableSegments(toPaint, primaryCan, hasSecondary ? secondaryCan : null, costScale);
 		if (paintableCount == 0) {
@@ -171,11 +186,15 @@ internal static class SprayPatches {
 		);
 
 		if (!doAction || !GameManager.RunSimulation) {
-			_activeSprayGun = gun;
+			if (isLocalPlayer) {
+				_activeSprayGun = doAction ? null : gun;
+			}
 			return action;
 		}
 
-		_activeSprayGun = null;
+		if (isLocalPlayer) {
+			_activeSprayGun = null;
+		}
 
 		foreach (var (segment, useSecondary) in toPaint) {
 			var can = useSecondary ? secondaryCan : primaryCan;
@@ -227,7 +246,7 @@ internal static class SprayPatches {
 		return count;
 	}
 
-	private static bool[] GetStripePattern() {
+	internal static bool[] GetStripePattern() {
 		var raw = SprayerMkIIPlugin.StripePattern?.Value ?? "PPS";
 		if (string.Equals(raw, _cachedPatternRaw, StringComparison.Ordinal)) {
 			return _cachedPattern;

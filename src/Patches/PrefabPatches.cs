@@ -60,7 +60,7 @@ internal static class PrefabPatches {
 			CanPrefabs.Add(can);
 		}
 
-		var multiplier = SprayerMkIIPlugin.GetSanitizedCanCapacityMultiplier();
+		var multiplier = MultiplayerSync.GetEffectiveCanCapacityMultiplier();
 		var scaledMax = Mathf.Max(baseMax, baseMax * multiplier);
 
 		can.MaxQuantity = scaledMax;
@@ -72,7 +72,7 @@ internal static class PrefabPatches {
 			GunPrefabs.Add(gun);
 		}
 
-		gun.Efficiency = SprayerMkIIPlugin.GetSanitizedSprayGunEfficiency();
+		gun.Efficiency = MultiplayerSync.GetEffectiveSprayGunEfficiency();
 
 		// Copy spray audio from a standard paint can so network spraying plays sound while active.
 		var templateCan = Prefab.Find<SprayCan>("ItemSprayCanWhite");
